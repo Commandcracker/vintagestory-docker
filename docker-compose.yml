@@ -9,4 +9,3 @@ services:
       - 42420:42420
     stdin_open: true
     tty: true
-    user: 1000:1000
