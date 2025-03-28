@@ -1,11 +1,13 @@
-services: 
-  vintagestory:
-    build: .
-    container_name: vsserver
-    restart: unless-stopped
-    volumes: 
-      - ./vintagestory:/srv/vintagestory
-    ports:
-      - 42420:42420
-    stdin_open: true
-    tty: true
+---
+services:
+    vintagestory:
+        build: .
+        container_name: vsserver
+        restart: unless-stopped
+        volumes: 
+          - ./vintagestory:/srv/vintagestory
+        ports:
+          - 42420:42420
+        stdin_open: true
+        tty: true
+...
