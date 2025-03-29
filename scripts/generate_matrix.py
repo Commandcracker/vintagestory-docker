@@ -26,8 +26,8 @@ def main():
     latest_unstable = unstable_versions[0] if unstable_versions else exit("No unstable version found")
 
     versions = [
-        {"VS_VERSION": latest_stable, "VS_TYPE": "stable"},
-        {"VS_VERSION": latest_unstable, "VS_TYPE": "unstable"}
+        {"VS_VERSION": latest_stable[1:], "VS_TYPE": "stable"},
+        {"VS_VERSION": latest_unstable[1:], "VS_TYPE": "unstable"}
     ]
 
     print(json.dumps({"include": versions}))

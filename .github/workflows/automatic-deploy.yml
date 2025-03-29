@@ -1,5 +1,5 @@
 ---
-name: stable
+name: Deploy
 
 on:
     schedule:
@@ -17,7 +17,7 @@ env:
     IMAGE_NAME: ${{ github.repository }}
 
 jobs:
-    generate-matrix:
+    get-latest:
         runs-on: ubuntu-latest
         outputs:
           matrix: ${{ steps.set-matrix.outputs.matrix }}
@@ -32,11 +32,11 @@ jobs:
               echo "matrix=$MATRIX" >> $GITHUB_ENV
               echo "matrix=$MATRIX" >> $GITHUB_OUTPUT
 
-    print-tag:
-        needs: generate-matrix
+    build-and-push:
+        needs: get-latest
         runs-on: ubuntu-latest
         strategy:
-            matrix: ${{ fromJson(needs.generate-matrix.outputs.matrix) }}
+            matrix: ${{ fromJson(needs.get-latest.outputs.matrix) }}
         steps:
             - name: Checkout 🛎️
               uses: actions/checkout@v4
