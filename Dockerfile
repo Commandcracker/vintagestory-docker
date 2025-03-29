@@ -13,16 +13,16 @@ RUN set -eux; \
         sqlite-libs \
         # Update zstd
         zstd-dev \
-        fontconfig-dev freetype-dev \
+        #fontconfig-dev freetype-dev \
         # Required for download of vintagestory
         curl tar \
         # TODO: I dont like js finde soemthing better
         # Required for json minification
-        nodejs npm; \
-    curl -sL https://cdn.vintagestory.at/gamefiles/${VS_TYPE}/vs_server_${VS_OS}_${VS_VERSION}.tar.gz | tar -xvzf -; \
-    npm install -g json5; \
+        nodejs npm && \
+    curl -sL https://cdn.vintagestory.at/gamefiles/${VS_TYPE}/vs_server_${VS_OS}_${VS_VERSION}.tar.gz | tar -xvzf - && \
+    npm install -g json5 && \
     # Remove unnecessary files to reduce image size [-2,2 MB]
-    rm VintagestoryAPI.xml credits.txt server.sh VintagestoryServer.deps.json VintagestoryServer; \
+    rm VintagestoryAPI.xml credits.txt server.sh VintagestoryServer.deps.json VintagestoryServer && \
     # Minify json files [-37.5 MB]
     # TODO: improve minification
     # TODO: see https://wiki.vintagestory.at/Modding:JSON_Patching
@@ -41,9 +41,12 @@ RUN set -eux; \
 
 FROM base
 
-RUN set -eux; \
-    apk add --no-cache gcompat; \
-    #apk add --no-cache fontconfig-static openal-soft-libs; \
+RUN set -eux && \
+    echo "app:x:1654:app" >> /etc/group && \
+    echo "app:!:20175:0:99999:7:::" >> /etc/passwd && \
+    mkdir /srv/vintagestory && chown 1654:1654 /srv/vintagestory && \
+    apk add --no-cache gcompat && \
+    #apk add --no-cache fontconfig-static openal-soft-libs && \
     apk add --no-cache --repository=http://dl-cdn.alpinelinux.org/alpine/v3.19/community dotnet7-runtime
 
 WORKDIR /opt/vintagestory
@@ -72,6 +75,14 @@ COPY --from=build /opt/dlls/System.Formats.Asn1.dll /usr/lib/dotnet/shared/Micro
 COPY --from=build /opt/dlls/System.Text.Json.dll /usr/lib/dotnet/shared/Microsoft.NETCore.App/7.0.20/System.Text.Json.dll
 
 EXPOSE 42420/tcp 42420/udp
+
+ENV \
+    APP_UID=1654 \
+    DOTNET_VERSION=7.0.20 \
+    DOTNET_RUNNING_IN_CONTAINER=true \
+    DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=true
+
+USER $APP_UID
 
 ENTRYPOINT ["dotnet", "VintagestoryServer.dll", "--dataPath", "/srv/vintagestory"] 
 
