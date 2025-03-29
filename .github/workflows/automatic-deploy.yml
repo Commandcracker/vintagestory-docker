@@ -35,6 +35,10 @@ jobs:
     build-and-push:
         needs: get-latest
         runs-on: ubuntu-latest
+        permissions:
+            contents: read
+            packages: write
+            id-token: write
         strategy:
             matrix: ${{ fromJson(needs.get-latest.outputs.matrix) }}
         steps:
