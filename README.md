@@ -1,7 +1,7 @@
 # vintagestory-docker
 
 Docker image for [Vintage Story] \
-Images are automatically deployed see [automatic-deploy.yml](.github\workflows\automatic-deploy.yml) and [generate_matrix.py](./scripts/generate_matrix.py).
+Images are automatically deployed see [automatic-deploy.yml](./.github\workflows\automatic-deploy.yml) and [generate_matrix.py](./scripts/generate_matrix.py).
 
 🚧 **Work in process!**
 
