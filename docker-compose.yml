@@ -1,13 +1,14 @@
 ---
-services:
+services: 
     vintagestory:
         build: .
-        container_name: vsserver
+        image: ghcr.io/commandcracker/vintagestory-docker:stable
         restart: unless-stopped
         volumes: 
-          - ./vintagestory:/srv/vintagestory
+            - ./vintagestory:/srv/vintagestory
         ports:
-          - 42420:42420
+            - 42420:42420/tcp
+            - 42420:42420/udp
         stdin_open: true
         tty: true
 ...
